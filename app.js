@@ -10,6 +10,7 @@ const sequelize = require('./database/db');
 //Routes
 app.use(require('./routes/characters'));
 app.use(require('./routes/movies'));
+app.use(require('./routes/genre'));
 
 app.listen(port, () => {
   console.log(`corriento en el puerto: ${port}`)

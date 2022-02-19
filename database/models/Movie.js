@@ -7,8 +7,9 @@ Movie.init({
     
     imagen:DataTypes.STRING,
     titulo: DataTypes.STRING,
-    crateAt: DataTypes.DATE,
+    createAt: DataTypes.DATE,
     rate: DataTypes.INTEGER,
+    genre: DataTypes.INTEGER
    
 }, {
         sequelize,
