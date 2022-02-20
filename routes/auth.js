@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-require('dotenv').config({ path: '.env'});
+require('dotenv').config({path: './process.env'});
  
 const login = require('../controllers/authController')
 const sendMail = require ('../controllers/sendMail')

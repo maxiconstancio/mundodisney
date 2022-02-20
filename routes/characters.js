@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
-require('dotenv').config( '/.env');
+require('dotenv').config({path: './process.env'});
 
 const Character = require("../database/models/Character");
 
