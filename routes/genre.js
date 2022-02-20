@@ -41,8 +41,8 @@ router.delete("/genre/:id", authenticateToken, (req, res) => {
     where: {
       id: req.params.id,
     },
-  }).then((genre) => {
-    res.json("Eliminado");
+  }).then(() => res.json("Eliminado")).catch(err => {
+      res.send(err);
   });
 });
 
