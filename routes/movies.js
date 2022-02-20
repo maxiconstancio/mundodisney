@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
-
+const authenticateToken = require("../controllers/authenticateToken");
 const Movie = require("../database/models/Movie");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 // Cargar Pelicula
-router.post("/movies", (req, res) => {
+router.post("/movies",authenticateToken, (req, res) => {
     Movie.create({
       imagen: req.body.imagen,
       titulo: req.body.titulo,
@@ -22,7 +22,7 @@ router.post("/movies", (req, res) => {
 
 
   // GET MOVIES
-  router.get("/movies", (req, res) => {
+  router.get("/movies",authenticateToken, (req, res) => {
     let condicion = {};
     let orderMovies=['id', 'ASC']
     if (req.query.hasOwnProperty("name")) {
@@ -47,7 +47,7 @@ router.post("/movies", (req, res) => {
 
   //UPDATE
 
-  router.put("/movies/:id", (req, res) => {
+  router.put("/movies/:id",authenticateToken, (req, res) => {
     Movie.update(
       {
         imagen: req.body.imagen,
@@ -67,7 +67,7 @@ router.post("/movies", (req, res) => {
   });
 
   //DELETE
-  router.delete("/movies/:id", (req, res) => {
+  router.delete("/movies/:id",authenticateToken, (req, res) => {
     Movie.destroy({
       where: {
         id: req.params.id,

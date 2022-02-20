@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
-
+const authenticateToken = require("../controllers/authenticateToken");
 const Genre = require("../database/models/Genre");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 // Cargar Genero
-router.post("/genre", (req, res) => {
+router.post("/genre", authenticateToken,(req, res) => {
   Genre.create({
     imagen: req.body.imagen,
     nombre: req.body.nombre,
@@ -18,7 +18,7 @@ router.post("/genre", (req, res) => {
 });
 
 // GET Generos
-router.get("/genre", (req, res) => {
+router.get("/genre",authenticateToken, (req, res) => {
   Genre.findAll().then((genre) => {
     res.json(genre);
   });
@@ -26,7 +26,7 @@ router.get("/genre", (req, res) => {
 
 //Update Genre
 
-router.put("/genre", (req, res) => {
+router.put("/genre",authenticateToken, (req, res) => {
   Genre.update({
     imagen: req.body.imagen,
     nombre: req.body.nombre,
@@ -36,7 +36,7 @@ router.put("/genre", (req, res) => {
 });
 
 // Delete Genero
-router.delete("/genre/:id", (req, res) => {
+router.delete("/genre/:id", authenticateToken, (req, res) => {
   Genre.destroy({
     where: {
       id: req.params.id,

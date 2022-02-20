@@ -4,11 +4,12 @@ const bodyParser = require("body-parser");
 
 const Character = require("../database/models/Character");
 
+const authenticateToken = require("../controllers/authenticateToken");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 // Crear Personaje
-router.post("/characters", (req, res) => {
+router.post("/characters", authenticateToken,   (req, res) => {
   Character.create({
     imagen: req.body.imagen,
     nombre: req.body.nombre,
@@ -23,9 +24,9 @@ router.post("/characters", (req, res) => {
 
 //Consultar Personaje
 
-router.get("/characters", (req, res) => {
+router.get("/characters",authenticateToken, (req, res) => {
   let condicion = {};
-  let queryData = req.query;
+ 
 
   if (req.query.hasOwnProperty("name")) {
     condicion = { nombre: req.query.name };
@@ -63,7 +64,7 @@ router.get("/characters", (req, res) => {
 
 //Update Personaje
 
-router.put("/characters/:id", (req, res) => {
+router.put("/characters/:id",authenticateToken, (req, res) => {
   Character.update(
     {
       imagen: req.body.imagen,
@@ -85,7 +86,7 @@ router.put("/characters/:id", (req, res) => {
 
 //Delete Character
 
-router.delete("/characters/:id", (req, res) => {
+router.delete("/characters/:id",authenticateToken, (req, res) => {
   Character.destroy({
     where: {
       id: req.params.id,
