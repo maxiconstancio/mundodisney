@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
+require('dotenv').config( '/.env');
 
 const Character = require("../database/models/Character");
 
@@ -25,6 +26,7 @@ router.post("/characters", authenticateToken,   (req, res) => {
 //Consultar Personaje
 
 router.get("/characters",authenticateToken, (req, res) => {
+  
   let condicion = {};
  
 

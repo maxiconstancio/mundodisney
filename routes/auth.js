@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 require('dotenv').config({ path: '.env'});
  
 const login = require('../controllers/authController')
+const sendMail = require ('../controllers/sendMail')
 const User = require("../database/models/User");
 
 
@@ -24,6 +25,7 @@ router.post('/auth/register', async (req,res)=> {
         password: hashedPassword
 
     }).then((user) => {
+    sendMail(req.body.email);  
     res.json(user);
   });
 })
