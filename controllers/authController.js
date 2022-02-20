@@ -15,7 +15,7 @@ function login (req,res) {
             res.json({ accessToken})
     
         } else {
-            res.statyssend('Not Allowed')
+            res.status(403).send('Not Allowed')
         }
     }).catch((err)=> res.send(err));
 

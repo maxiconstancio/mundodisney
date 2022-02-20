@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken') 
 require('dotenv').config({path: './process.env'});
-console.log(process.env.DATABASE)
+
 function authenticateToken (req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split('')[1]

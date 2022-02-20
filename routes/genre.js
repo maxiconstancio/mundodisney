@@ -3,6 +3,8 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const authenticateToken = require("../controllers/authenticateToken");
 const Genre = require("../database/models/Genre");
+const Movie = require("../database/models/Movie");
+const asociation = require('../database/asociations')
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -19,7 +21,13 @@ router.post("/genre", authenticateToken,(req, res) => {
 
 // GET Generos
 router.get("/genre",authenticateToken, (req, res) => {
-  Genre.findAll().then((genre) => {
+  Genre.findAll({
+      include: {
+          model: Movie,
+          attributes: ['titulo']
+      }}
+  ).then((genre) => {
+      
     res.json(genre);
   });
 });

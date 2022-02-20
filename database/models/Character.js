@@ -10,10 +10,17 @@ Character.init({
     edad: DataTypes.STRING,
     peso: DataTypes.STRING,
     historia: DataTypes.STRING,
-    peliculas: DataTypes.INTEGER 
+    peliculasId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'movies',
+            key: 'id'
+        } 
+   } 
+    
 }, {
         sequelize,
-        modelName: "character"
+        modelName: "characters"
     });
 
 

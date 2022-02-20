@@ -17,7 +17,7 @@ router.post("/characters", authenticateToken,   (req, res) => {
     edad: req.body.edad,
     peso: req.body.peso,
     historia: req.body.historia,
-    peliculas: req.body.peliculas,
+    peliculasId: req.body.peliculas,
   }).then((character) => {
     res.json(character);
   });
@@ -34,8 +34,8 @@ router.get("/characters",authenticateToken, (req, res) => {
     condicion = { nombre: req.query.name };
   } else if (req.query.hasOwnProperty("age")) {
     condicion = { edad: req.query.age };
-  } else if (req.query.hasOwnProperty("movie")) {
-    condicion = { peliculas: req.query.movie };
+  } else if (req.query.hasOwnProperty("movies")) {
+    condicion = { peliculasId: req.query.movies };
   } else {
     condicion = null;
   }
@@ -74,7 +74,7 @@ router.put("/characters/:id",authenticateToken, (req, res) => {
       edad: req.body.edad,
       peso: req.body.peso,
       historia: req.body.historia,
-      peliculas: req.body.peliculas,
+      peliculasId: req.body.peliculas,
     },
     {
       where: {

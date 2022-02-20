@@ -11,7 +11,7 @@ Genre.init({
    
 }, {
         sequelize,
-        modelName: "genre"
+        modelName: "genres"
     });
 
 

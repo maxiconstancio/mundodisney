@@ -3,6 +3,9 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const authenticateToken = require("../controllers/authenticateToken");
 const Movie = require("../database/models/Movie");
+const Genre = require("../database/models/Genre");
+const Character= require("../database/models/Character");
+const asociation = require('../database/asociations');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -14,7 +17,7 @@ router.post("/movies",authenticateToken, (req, res) => {
       titulo: req.body.titulo,
       createAt: req.body.fechaCreacion,
       rate: req.body.rate,
-      genre: req.body.genre
+      genreId: req.body.genre
     }).then((movie) => {
       res.json(movie);
     });
@@ -28,7 +31,7 @@ router.post("/movies",authenticateToken, (req, res) => {
     if (req.query.hasOwnProperty("name")) {
       condicion = { titulo: req.query.name };
     } else if (req.query.hasOwnProperty("genre")) {
-      condicion = { genre: req.query.genre };
+      condicion = { genreId: req.query.genre };
     } else if (req.query.hasOwnProperty("order")) {
       orderMovies = [ 'rate', req.query.order ];
     } else {
@@ -38,7 +41,14 @@ router.post("/movies",authenticateToken, (req, res) => {
   
     Movie.findAll({
       where: condicion,
-      attributes: ["imagen", "titulo"],
+      attributes: ["imagen", "titulo","createAt"],
+      include: [{
+        model: Genre,
+        attributes: ['nombre']
+      }, {
+        model: Character,
+        attributes: ['nombre']
+      }],
       order: [orderMovies]
     }).then((movies) => {
       res.json(movies);
@@ -54,7 +64,7 @@ router.post("/movies",authenticateToken, (req, res) => {
         titulo: req.body.titulo,
         createAt: req.body.fechaCreacion,
         rate: req.body.rate,
-        genre: req.body.genre
+        genreId: req.body.genre
       },
       {
         where: {

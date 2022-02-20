@@ -9,11 +9,17 @@ Movie.init({
     titulo: DataTypes.STRING,
     createAt: DataTypes.DATE,
     rate: DataTypes.INTEGER,
-    genre: DataTypes.INTEGER
+    genreId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'genres',
+                key: 'id'
+            } 
+    } 
    
 }, {
         sequelize,
-        modelName: "movie"
+        modelName: "movies"
     });
 
 
