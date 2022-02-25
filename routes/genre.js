@@ -14,6 +14,7 @@ router.post("/genre", authenticateToken,(req, res) => {
   Genre.create({
     imagen: req.body.imagen,
     nombre: req.body.nombre,
+    
   }).then((genre) => {
     res.json(genre);
   });

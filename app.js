@@ -16,7 +16,6 @@ app.use(require('./routes/auth'))
 
 app.listen(port, () => {
   console.log(`corriento en el puerto: ${port}`)
-
   // Conectarse
     sequelize.sync( {force: false }).then(() => {
         console.log("conecto correctamente");

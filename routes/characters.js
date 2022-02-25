@@ -28,7 +28,7 @@ router.post("/characters", authenticateToken,   (req, res) => {
 router.get("/characters",authenticateToken, (req, res) => {
   
   let condicion = {};
- 
+  let atributos = null;
 
   if (req.query.hasOwnProperty("name")) {
     condicion = { nombre: req.query.name };
@@ -38,6 +38,7 @@ router.get("/characters",authenticateToken, (req, res) => {
     condicion = { peliculasId: req.query.movies };
   } else {
     condicion = null;
+    atributos = ["imagen", "nombre"];
   }
 
   /* switch (Object.keys(queryData)[0]) {
@@ -58,7 +59,7 @@ router.get("/characters",authenticateToken, (req, res) => {
 
   Character.findAll({
     where: condicion,
-    attributes: ["imagen", "nombre"],
+    attributes: atributos,
   }).then((characters) => {
     res.json(characters);
   });

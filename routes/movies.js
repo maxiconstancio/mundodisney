@@ -15,9 +15,9 @@ router.post("/movies",authenticateToken, (req, res) => {
     Movie.create({
       imagen: req.body.imagen,
       titulo: req.body.titulo,
-      createAt: req.body.fechaCreacion,
+      createAt: req.body.createAt,
       rate: req.body.rate,
-      genreId: req.body.genre
+      genreId: req.body.genreId
     }).then((movie) => {
       res.json(movie);
     });
@@ -62,9 +62,9 @@ router.post("/movies",authenticateToken, (req, res) => {
       {
         imagen: req.body.imagen,
         titulo: req.body.titulo,
-        createAt: req.body.fechaCreacion,
+        createAt: req.body.createAt,
         rate: req.body.rate,
-        genreId: req.body.genre
+        genreId: req.body.genreId
       },
       {
         where: {
