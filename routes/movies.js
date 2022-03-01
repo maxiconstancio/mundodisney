@@ -3,7 +3,7 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const authenticateToken = require("../controllers/authenticateToken");
 const Movie = require("../database/models/Movie");
-const Genre = require("../database/models/Genre");
+const Genres = require("../database/models/Genres");
 const Character= require("../database/models/Character");
 const asociation = require('../database/asociations');
 
@@ -12,12 +12,13 @@ router.use(bodyParser.json());
 
 // Cargar Pelicula
 router.post("/movies",authenticateToken, (req, res) => {
+    
     Movie.create({
-      imagen: req.body.imagen,
-      titulo: req.body.titulo,
-      createAt: req.body.createAt,
+      picture: req.body.picture , 
+      name: req.body.name,
+      premiere: req.body.premiere,
       rate: req.body.rate,
-      genreId: req.body.genreId
+      genre: req.body.genre
     }).then((movie) => {
       res.json(movie);
     });
@@ -28,31 +29,39 @@ router.post("/movies",authenticateToken, (req, res) => {
   router.get("/movies",authenticateToken, (req, res) => {
     let condicion = {};
     let orderMovies=['id', 'ASC']
-    if (req.query.hasOwnProperty("name")) {
-      condicion = { titulo: req.query.name };
-    } else if (req.query.hasOwnProperty("genre")) {
-      condicion = { genreId: req.query.genre };
-    } else if (req.query.hasOwnProperty("order")) {
-      orderMovies = [ 'rate', req.query.order ];
-    } else {
-      condicion = null;
+    
+    if (Object.keys(req.query).length > 0) {
+       if (req.query.hasOwnProperty("order")) {
+        orderMovies = [ 'rate', req.query.order ];
+      } else {
+        condicion = req.query;
+      }
+     
+    
+      Movie.findAll({
+        where: condicion,
+        include: [{
+          model: Genres,
+          as: 'genreId',
+          attributes: ['name']
+        }, {
+          model: Character,
+          as: 'characterId',
+          attributes: ['name']
+        }],
+        order: [orderMovies]
+      }).then((movies) => {
+        res.json(movies);
+      });
     }
-  
-  
-    Movie.findAll({
-      where: condicion,
-      attributes: ["imagen", "titulo","createAt"],
-      include: [{
-        model: Genre,
-        attributes: ['nombre']
-      }, {
-        model: Character,
-        attributes: ['nombre']
-      }],
-      order: [orderMovies]
-    }).then((movies) => {
-      res.json(movies);
-    });
+    else {
+      Movie.findAll({attributes: ['picture', 'name', 'premiere']})
+      .then((movies) => {
+        res.json(movies)
+      })
+    }
+    
+    
   });
 
   //UPDATE
@@ -60,11 +69,11 @@ router.post("/movies",authenticateToken, (req, res) => {
   router.put("/movies/:id",authenticateToken, (req, res) => {
     Movie.update(
       {
-        imagen: req.body.imagen,
-        titulo: req.body.titulo,
-        createAt: req.body.createAt,
-        rate: req.body.rate,
-        genreId: req.body.genreId
+        picture: req.body.picture , 
+      name: req.body.name,
+      premiere: req.body.premiere,
+      rate: req.body.rate,
+      genre: req.body.genre
       },
       {
         where: {

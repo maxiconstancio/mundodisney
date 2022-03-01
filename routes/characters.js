@@ -1,23 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
-require('dotenv').config({path: './process.env'});
+require("dotenv").config({ path: "./process.env" });
 
 const Character = require("../database/models/Character");
+const Movie = require("../database/models/Movie");
 
 const authenticateToken = require("../controllers/authenticateToken");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 // Crear Personaje
-router.post("/characters", authenticateToken,   (req, res) => {
+router.post("/characters", authenticateToken, (req, res) => {
   Character.create({
-    imagen: req.body.imagen,
-    nombre: req.body.nombre,
-    edad: req.body.edad,
-    peso: req.body.peso,
-    historia: req.body.historia,
-    peliculasId: req.body.peliculas,
+    picture: req.body.picture,
+    name: req.body.name,
+    age: req.body.age,
+    weight: req.body.weight,
+    history: req.body.history,
+    movie: req.body.movie,
   }).then((character) => {
     res.json(character);
   });
@@ -25,77 +26,59 @@ router.post("/characters", authenticateToken,   (req, res) => {
 
 //Consultar Personaje
 
-router.get("/characters",authenticateToken, (req, res) => {
-  
-  let condicion = {};
-  let atributos = null;
+router.get("/characters", authenticateToken, (req, res) => {
+  console.log(req.query);
+  let reqQuery = {};
 
-  if (req.query.hasOwnProperty("name")) {
-    condicion = { nombre: req.query.name };
-  } else if (req.query.hasOwnProperty("age")) {
-    condicion = { edad: req.query.age };
-  } else if (req.query.hasOwnProperty("movies")) {
-    condicion = { peliculasId: req.query.movies };
+  /* si se filtra por nombre, edad, peso o pelicula muestra detalle de cada uno de los personajes 
+  sino muestra solo Imagen y Nombre*/
+  if (Object.keys(req.query).length > 0) {
+    reqQuery = {
+      where: req.query,
+      include: {
+        model: Movie,
+        as: "movieId",
+        attributes: ["name"],
+      },
+    };
   } else {
-    condicion = null;
-    atributos = ["imagen", "nombre"];
+    reqQuery = { attributes: ["picture", "name"] };
   }
 
-  /* switch (Object.keys(queryData)[0]) {
-    case "name":
-      console.log("aerewqr");
-      condicion = { nombre: req.query.name };
-      break;
-    case "age":
-      condicion = { edad: parseInt(req.query.age) };
-      break;
-    case "movie":
-      condicion = { peliculas: req.query.movie };
-      break;
-    default:
-      condicion = null;
-      break;
-  } */
-
-  Character.findAll({
-    where: condicion,
-    attributes: atributos,
-  }).then((characters) => {
+  Character.findAll(reqQuery).then((characters) => {
     res.json(characters);
+  }).catch(error => {
+    res.sendStatus(500, error)
   });
 });
 
 //Update Personaje
 
-router.put("/characters/:id",authenticateToken, (req, res) => {
-  Character.update(
-    {
-      imagen: req.body.imagen,
-      nombre: req.body.nombre,
-      edad: req.body.edad,
-      peso: req.body.peso,
-      historia: req.body.historia,
-      peliculasId: req.body.peliculas,
+router.put("/characters/:id", authenticateToken, (req, res) => {
+  let reqQuery = req.body;
+  Character.update(reqQuery, {
+    where: {
+      id: req.params.id,
     },
-    {
-      where: {
-        id: req.params.id,
-      },
-    }
-  ).then((character) => {
+  }).then((character) => {
     res.json(character);
+  }).catch(error => {
+    res.sendStatus(500, error)
   });
 });
 
 //Delete Character
 
-router.delete("/characters/:id",authenticateToken, (req, res) => {
+router.delete("/characters/:id", authenticateToken, (req, res) => {
   Character.destroy({
     where: {
       id: req.params.id,
     },
-  }).then((character) => {
-    res.json("Eliminado");
+  }).then(() => {
+    res.sendStatus(410,"Eliminado")
+    //res.json("Eliminado");
+  }).catch(error => {
+    res.sendStatus(500, error)
   });
 });
 module.exports = router;

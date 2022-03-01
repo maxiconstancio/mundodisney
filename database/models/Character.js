@@ -5,12 +5,12 @@ class Character extends Model {}
 
 Character.init({
 
-    imagen:DataTypes.STRING,
-    nombre: DataTypes.STRING,
-    edad: DataTypes.STRING,
-    peso: DataTypes.STRING,
-    historia: DataTypes.STRING,
-    peliculasId: {
+    picture:DataTypes.STRING,
+    name: DataTypes.STRING,
+    age: DataTypes.STRING,
+    weight: DataTypes.STRING,
+    history: DataTypes.STRING,
+    movie: {
         type: DataTypes.INTEGER,
         references: {
             model: 'movies',

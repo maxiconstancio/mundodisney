@@ -5,11 +5,11 @@ class Movie extends Model {}
 
 Movie.init({
     
-    imagen:DataTypes.STRING,
-    titulo: DataTypes.STRING,
-    createAt: DataTypes.DATE,
+    picture:DataTypes.STRING,
+    name: DataTypes.STRING,
+    premiere: DataTypes.DATE,
     rate: DataTypes.INTEGER,
-    genreId: {
+    genre: {
             type: DataTypes.INTEGER,
             references: {
                 model: 'genres',

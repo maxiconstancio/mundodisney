@@ -8,6 +8,8 @@ function login (req,res) {
             email: req.body.email
         }
     }).then(async (user) => {
+        if (user != null) {
+            
         if (await bcrypt.compare(req.body.password, user.password)) {
             
            const accessToken = jwt.sign(user.nombre, process.env.ACCESS_TOKEN_SECRET)
@@ -15,8 +17,13 @@ function login (req,res) {
             res.json({ accessToken})
     
         } else {
-            res.status(403).send('Not Allowed')
+            res.status(403).send('Incorrect Password')
         }
+    } else 
+    {
+        res.status(404).send('No existe el usuario')
+        
+    }
     }).catch((err)=> res.send(err));
 
 }

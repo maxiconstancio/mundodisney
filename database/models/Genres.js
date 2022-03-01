@@ -1,12 +1,12 @@
 const  { Model, DataTypes }  = require('sequelize');
 const sequelize = require('../db');
 
-class Genre extends Model {}
+class Genres extends Model {}
 
-Genre.init({
+Genres.init({
     
-    imagen:DataTypes.STRING,
-    nombre: DataTypes.STRING,
+    picture:DataTypes.STRING,
+    name: DataTypes.STRING,
     
    
 }, {
@@ -16,4 +16,4 @@ Genre.init({
 
 
 
-module.exports = Genre;
+module.exports = Genres;

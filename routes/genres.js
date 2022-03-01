@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const authenticateToken = require("../controllers/authenticateToken");
-const Genre = require("../database/models/Genre");
+const Genres = require("../database/models/Genres");
 const Movie = require("../database/models/Movie");
 const asociation = require('../database/asociations')
 
@@ -11,9 +11,9 @@ router.use(bodyParser.json());
 
 // Cargar Genero
 router.post("/genre", authenticateToken,(req, res) => {
-  Genre.create({
-    imagen: req.body.imagen,
-    nombre: req.body.nombre,
+  Genres.create({
+    picture: req.body.picture,
+    name: req.body.name,
     
   }).then((genre) => {
     res.json(genre);
@@ -22,12 +22,7 @@ router.post("/genre", authenticateToken,(req, res) => {
 
 // GET Generos
 router.get("/genre",authenticateToken, (req, res) => {
-  Genre.findAll({
-      include: {
-          model: Movie,
-          attributes: ['titulo']
-      }}
-  ).then((genre) => {
+  Genres.findAll().then((genre) => {
       
     res.json(genre);
   });
@@ -36,7 +31,7 @@ router.get("/genre",authenticateToken, (req, res) => {
 //Update Genre
 
 router.put("/genre",authenticateToken, (req, res) => {
-  Genre.update({
+  Genres.update({
     imagen: req.body.imagen,
     nombre: req.body.nombre,
   }).then((genre) => {
@@ -46,11 +41,17 @@ router.put("/genre",authenticateToken, (req, res) => {
 
 // Delete Genero
 router.delete("/genre/:id", authenticateToken, (req, res) => {
-  Genre.destroy({
+  Genres.destroy({
     where: {
       id: req.params.id,
     },
-  }).then(() => res.json("Eliminado")).catch(err => {
+  }).then((resp) => {
+    if (resp==0) {
+      res.status(404).send("No se encuentra el genero a eliminar")
+    } else {res.status(410).send("Eliminado")}
+    
+  })
+  .catch(err => {
       res.send(err);
   });
 });
