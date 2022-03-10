@@ -5,7 +5,21 @@ class User extends Model {}
 
 User.init({
     
-    email:DataTypes.STRING,
+    email:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: {
+                msg: 'Email already exist'
+            },
+            validate: {
+                isEmail: {
+                    msg: 'Invalid email'
+                },
+                notEmpty: {
+                    msg: 'Email is required'
+                }
+            }
+        },
     nombre: DataTypes.STRING,
     password: DataTypes.STRING
    

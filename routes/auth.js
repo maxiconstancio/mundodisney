@@ -27,7 +27,7 @@ router.post('/auth/register', async (req,res)=> {
     }).then((user) => {
     sendMail(req.body.email);  
     res.json(user);
-  });
+  }).catch((err)=> res.send(err.message));
 })
 
 
