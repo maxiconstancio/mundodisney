@@ -6,9 +6,9 @@ function sendMail (mailTo) {
 const msg = {
   to: mailTo, // Change to your recipient
   from: 'maxiconstancio@hotmail.com', // Change to your verified sender
-  subject: 'Sending with SendGrid is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  subject: 'Thanks for your registration!',
+  text: 'Este email fue generado por la API de Disney',
+  html: `<strong>Hola ${mailTo} </strong>`,
 }
 sgMail
   .send(msg)

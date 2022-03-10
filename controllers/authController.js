@@ -1,9 +1,12 @@
 const User = require('../database/models/User')
 const jwt = require('jsonwebtoken') 
 const bcrypt = require('bcrypt')
-function login (req,res) {
 
+
+function login (req,res) {
+    
     User.findOne({
+        //Busca el usuario por la direccion de email
         where: {
             email: req.body.email
         }
@@ -11,9 +14,10 @@ function login (req,res) {
         if (user != null) {
             
         if (await bcrypt.compare(req.body.password, user.password)) {
-            
+           
+            // Si la contraseña es correcta, genera token y lo envia. 
            const accessToken = jwt.sign(user.nombre, process.env.ACCESS_TOKEN_SECRET)
-    
+            
             res.json({ accessToken})
     
         } else {
@@ -21,7 +25,7 @@ function login (req,res) {
         }
     } else 
     {
-        res.status(404).send('No existe el usuario')
+        res.status(404).send("User doesn't exist")
         
     }
     }).catch((err)=> res.send(err));
